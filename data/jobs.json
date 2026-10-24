@@ -143,5 +143,297 @@
       "選考：AI面接・専門課題・採用担当との面接"
     ],
     "applyUrl": "https://sme.careers/apply?jobId=JapaneseQAL-25-303"
+  },
+  {
+    "kind": "job",
+    "weeklyHours": null,
+    "employmentType": "業務委託",
+    "phone": null,
+    "meetings": null,
+    "speaking": null,
+    "english": true,
+    "englishNote": "説明を英語で書くため、明快な英文が必要。",
+    "japanOk": null,
+    "shortDayOk": true,
+    "flexibleSchedule": true,
+    "checkedAt": "2026-10-24",
+    "addedAt": "2026-10-24",
+    "id": "dataannotation-japanese-specialist",
+    "company": "DataAnnotation",
+    "title": "Japanese Specialist",
+    "category": "AI評価（日本語）",
+    "summary": "AIの日本語出力を採点・順位づけし、敬語や助数詞の誤りを直して自然な日本語に書き直す。英日翻訳のチェックも。",
+    "pay": {
+      "min": null,
+      "max": 40,
+      "currency": "USD",
+      "unit": "hour",
+      "note": "上限額。作業の難しさや専門性で変わる。支払いはPayPalで毎週。"
+    },
+    "requirements": [
+      "日本語ネイティブ相当",
+      "敬語・話し言葉の使い分け",
+      "明快な英文",
+      "学位は不要",
+      "応募後に適性テスト（Qualify）"
+    ],
+    "sourceUrl": "https://www.dataannotation.tech/job-board/japanese-expert",
+    "applyUrl": "https://www.dataannotation.tech/job-board/japanese-expert"
+  },
+  {
+    "kind": "job",
+    "weeklyHours": null,
+    "employmentType": "業務委託",
+    "phone": null,
+    "meetings": null,
+    "speaking": null,
+    "english": true,
+    "englishNote": "自然で明快な英文が必要。",
+    "japanOk": null,
+    "shortDayOk": true,
+    "flexibleSchedule": true,
+    "checkedAt": "2026-10-24",
+    "addedAt": "2026-10-24",
+    "id": "dataannotation-generalist",
+    "company": "DataAnnotation",
+    "title": "Generalist",
+    "category": "AI評価（英語）",
+    "summary": "日常的な話題についてAIの回答を正確さ・有用さ・口調の面で評価し、足りない回答は書き直す。専門知識は不要。",
+    "pay": {
+      "min": null,
+      "max": 50,
+      "currency": "USD",
+      "unit": "hour",
+      "note": "上限額。作業の難しさや専門性で変わる。支払いはPayPalで毎週。"
+    },
+    "requirements": [
+      "高い読解力と注意深さ",
+      "自然で明快な英文",
+      "学位は不要",
+      "応募後に適性テスト（Qualify）"
+    ],
+    "sourceUrl": "https://www.dataannotation.tech/job-board/generalist",
+    "applyUrl": "https://www.dataannotation.tech/job-board/generalist"
+  },
+  {
+    "kind": "job",
+    "weeklyHours": null,
+    "employmentType": "業務委託",
+    "phone": null,
+    "meetings": null,
+    "speaking": true,
+    "english": null,
+    "englishNote": null,
+    "japanOk": true,
+    "shortDayOk": null,
+    "flexibleSchedule": true,
+    "checkedAt": "2026-10-24",
+    "addedAt": "2026-10-24",
+    "id": "alignerr-japanese-voice-ai-evaluator-osaka",
+    "company": "Alignerr",
+    "title": "Japanese Voice AI Evaluator (Healthcare Conversations)",
+    "category": "音声AI評価",
+    "summary": "大阪エリア在住者向け。架空の患者を演じてAIの病院受付と4〜5分会話し、聞き取りや応答を評価する。",
+    "pay": {
+      "min": 12,
+      "max": 40,
+      "currency": "USD",
+      "unit": "hour",
+      "note": "タスク単位の契約。最初の適性テストは無報酬。"
+    },
+    "requirements": [
+      "日本語ネイティブ相当で聞き取りやすい声",
+      "静かな場所・良いマイク・安定した回線",
+      "背景音を流すための2台目の端末",
+      "無報酬の適性テストに合格すること",
+      "大阪エリア在住"
+    ],
+    "sourceUrl": "https://www.alignerr.com/jobs/8e41d064-ae99-4ed8-b80b-cf604dd01d0b",
+    "applyUrl": "https://www.alignerr.com/jobs/8e41d064-ae99-4ed8-b80b-cf604dd01d0b"
+  },
+  {
+    "kind": "job",
+    "weeklyHours": {
+      "min": 10,
+      "max": 40
+    },
+    "employmentType": "業務委託",
+    "phone": null,
+    "meetings": null,
+    "speaking": null,
+    "english": false,
+    "englishNote": "英語は「あれば尚可」。",
+    "japanOk": true,
+    "shortDayOk": null,
+    "flexibleSchedule": true,
+    "checkedAt": "2026-10-24",
+    "addedAt": "2026-10-24",
+    "id": "alignerr-japanese-audio-transcription-specialist",
+    "company": "Alignerr",
+    "title": "Japanese Audio Transcription Specialist",
+    "category": "文字起こし",
+    "summary": "日本語の音声を聞いて、言いよどみや話者の重なりまで正確に書き起こす。AIや文字起こしの経験は不要（東京在住者を優先）。",
+    "pay": {
+      "min": 10,
+      "max": 35,
+      "currency": "USD",
+      "unit": "hour",
+      "note": "時給制の業務委託。"
+    },
+    "requirements": [
+      "日本語ネイティブで高い聞き取り力",
+      "漢字・ひらがな・カタカナの正確な表記",
+      "AI・文字起こしの経験は不要",
+      "東京在住者を優先"
+    ],
+    "sourceUrl": "https://www.alignerr.com/jobs/9f7f1871-c1e0-4dd4-b7fd-bf4dccfa449b",
+    "applyUrl": "https://www.alignerr.com/jobs/9f7f1871-c1e0-4dd4-b7fd-bf4dccfa449b"
+  },
+  {
+    "kind": "job",
+    "weeklyHours": {
+      "min": 10,
+      "max": 40
+    },
+    "employmentType": "業務委託",
+    "phone": null,
+    "meetings": null,
+    "speaking": null,
+    "english": null,
+    "englishNote": null,
+    "japanOk": true,
+    "shortDayOk": null,
+    "flexibleSchedule": true,
+    "checkedAt": "2026-10-24",
+    "addedAt": "2026-10-24",
+    "id": "alignerr-japanese-audio-transcript-editor",
+    "company": "Alignerr",
+    "title": "Japanese Audio Transcript Editor (AI Training)",
+    "category": "文字起こし",
+    "summary": "東京エリア在住者向け。日本語音声の書き起こしを聞き直し、聞き間違い・漢字・句読点・タイミングを修正する。",
+    "pay": {
+      "min": 10,
+      "max": 35,
+      "currency": "USD",
+      "unit": "hour",
+      "note": "時給制の業務委託。"
+    },
+    "requirements": [
+      "日本語ネイティブ相当で高い聞き取り力",
+      "単語単位の正確さとタイミング調整",
+      "細かいスタイルガイドに従えること",
+      "AIの経験は不要",
+      "東京エリア在住"
+    ],
+    "sourceUrl": "https://www.alignerr.com/jobs/71972747-257e-4716-ab87-f4c97300dc25",
+    "applyUrl": "https://www.alignerr.com/jobs/71972747-257e-4716-ab87-f4c97300dc25"
+  },
+  {
+    "kind": "job",
+    "weeklyHours": {
+      "min": 10,
+      "max": 40
+    },
+    "employmentType": "業務委託",
+    "phone": null,
+    "meetings": null,
+    "speaking": null,
+    "english": true,
+    "englishNote": "日本語と英語の両方で文章が書けること。",
+    "japanOk": null,
+    "shortDayOk": null,
+    "flexibleSchedule": true,
+    "checkedAt": "2026-10-24",
+    "addedAt": "2026-10-24",
+    "id": "alignerr-japanese-language-expert",
+    "company": "Alignerr",
+    "title": "Japanese Language Expert",
+    "category": "AI評価（日本語）",
+    "summary": "AIが書いた日本語や翻訳の正確さ・自然さを確認し、不自然な表現や文化的な問題を指摘して改善案を出す。",
+    "pay": {
+      "min": 40,
+      "max": 120,
+      "currency": "USD",
+      "unit": "hour",
+      "note": "時給制の業務委託。"
+    },
+    "requirements": [
+      "日本語ネイティブ相当",
+      "日本語と英語の文章力",
+      "AI・技術の経験は不要"
+    ],
+    "sourceUrl": "https://www.alignerr.com/jobs/5bf0d1ad-1aa6-4225-8a99-bc09eaa0fd58",
+    "applyUrl": "https://www.alignerr.com/jobs/5bf0d1ad-1aa6-4225-8a99-bc09eaa0fd58"
+  },
+  {
+    "kind": "job",
+    "weeklyHours": null,
+    "employmentType": "業務委託",
+    "phone": null,
+    "meetings": null,
+    "speaking": true,
+    "english": true,
+    "englishNote": "流暢な英語。選考で英語を話すチェックがある場合あり。",
+    "japanOk": true,
+    "shortDayOk": null,
+    "flexibleSchedule": true,
+    "checkedAt": "2026-10-24",
+    "addedAt": "2026-10-24",
+    "id": "outlier-ai-evaluator-english",
+    "company": "Outlier",
+    "title": "AI Evaluator – English",
+    "category": "AI評価（英語）",
+    "summary": "英語でAI音声と会話して自然さを評価したり、AI生成の画像・動画を比べて採点し、理由を英語で書く。",
+    "pay": {
+      "min": null,
+      "max": 15,
+      "currency": "USD",
+      "unit": "hour",
+      "note": "本文の基本単価は最大$15/時（一覧の表示は最大$18）。平均7.5%のインセンティブあり。研修中などは低い単価。"
+    },
+    "requirements": [
+      "流暢な英語と明快な英文",
+      "学士在学中または学士以上",
+      "PC・安定した回線・ヘッドホン",
+      "会話する案件のための静かな場所",
+      "評価文にAIツールを使わないこと"
+    ],
+    "sourceUrl": "https://app.outlier.ai/en/expert/opportunities/4723202005",
+    "applyUrl": "https://app.outlier.ai/en/expert/opportunities/4723202005"
+  },
+  {
+    "kind": "job",
+    "weeklyHours": null,
+    "employmentType": "業務委託",
+    "phone": null,
+    "meetings": null,
+    "speaking": null,
+    "english": null,
+    "englishNote": null,
+    "japanOk": true,
+    "shortDayOk": null,
+    "flexibleSchedule": true,
+    "checkedAt": "2026-10-24",
+    "addedAt": "2026-10-24",
+    "id": "outlier-android-ai-evaluator-japanese",
+    "company": "Outlier",
+    "title": "Android AI Evaluator - Japanese",
+    "category": "AI評価（日本語）",
+    "summary": "自分のAndroidスマホでAIアシスタントを指示どおりに操作し、画面を録画してアップロードし、起きたことを記録する。",
+    "pay": {
+      "min": null,
+      "max": 8,
+      "currency": "USD",
+      "unit": "hour",
+      "note": "本文の基本単価は最大$8/時（一覧の表示は最大$31）。平均7.5%のインセンティブあり。仕事がある時だけ働ける。"
+    },
+    "requirements": [
+      "日本語ネイティブ相当",
+      "画面録画できる自分のAndroidスマホ",
+      "複数手順の操作と録画のアップロード",
+      "安定した回線"
+    ],
+    "sourceUrl": "https://app.outlier.ai/en/expert/opportunities/4729399005",
+    "applyUrl": "https://app.outlier.ai/en/expert/opportunities/4729399005"
   }
 ]

@@ -2,13 +2,18 @@
 import type { Experience, ExperienceTopic } from "../lib/types";
 
 interface Props {
-  /** タブの name を求人ごとに分けるため */
-  jobId: string;
+  /** タブの name をページ内で分けるため (求人 id など) */
+  groupId: string;
   /** この会社の確認済み体験談 */
   experiences: Experience[];
+  lead?: string;
 }
 
-const { jobId, experiences } = Astro.props;
+const {
+  groupId,
+  experiences,
+  lead = "同じ会社についての投稿です。この求人と同じ案件の話とは限りません。",
+} = Astro.props;
 
 const topics: { value: "" | ExperienceTopic; label: string }[] = [
   { value: "", label: "すべて" },
@@ -23,7 +28,7 @@ const authorCount = new Set(experiences.map((e) => `${e.platform}:${e.author}`))
 
 <section class="experiences" data-experiences>
   <h3 class="heading">利用者の体験 <span class="count">{authorCount}人</span></h3>
-  <p class="muted">同じ会社についての投稿です。この求人と同じ案件の話とは限りません。</p>
+  <p class="muted">{lead}</p>
 
   {
     experiences.length === 0 ? (
@@ -33,7 +38,7 @@ const authorCount = new Set(experiences.map((e) => `${e.platform}:${e.author}`))
         <div class="tabs" role="radiogroup" aria-label="体験談の種類">
           {topics.map((t, i) => (
             <label>
-              <input type="radio" name={`topic-${jobId}`} value={t.value} checked={i === 0} data-topic-tab />
+              <input type="radio" name={`topic-${groupId}`} value={t.value} checked={i === 0} data-topic-tab />
               {t.label}
             </label>
           ))}

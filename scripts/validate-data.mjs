@@ -6,6 +6,7 @@ const jobs = JSON.parse(readFileSync(new URL("../data/jobs.json", import.meta.ur
 const experiences = JSON.parse(
   readFileSync(new URL("../data/experiences.json", import.meta.url), "utf8"),
 );
+const companyList = JSON.parse(readFileSync(new URL("../data/companies.json", import.meta.url), "utf8"));
 
 const errors = [];
 const DATE = /^\d{4}-\d{2}-\d{2}$/;
@@ -54,6 +55,32 @@ for (const [i, j] of jobs.entries()) {
   check(at, DATE.test(j.addedAt ?? ""), "addedAt は YYYY-MM-DD");
 }
 
+const slugs = new Set();
+const companyNames = new Set();
+for (const [i, c] of companyList.entries()) {
+  const at = `companies[${i}] ${c.name ?? ""}`;
+  check(at, ID.test(c.slug ?? ""), "slug は英小文字・数字・ハイフンで");
+  check(at, !slugs.has(c.slug), "slug が重複");
+  check(at, isStr(c.name) && !companyNames.has(c.name), "name が空か重複");
+  slugs.add(c.slug);
+  companyNames.add(c.name);
+  check(at, isStr(c.about), "about が空");
+  check(at, isUrl(c.website), "website は https の URL");
+  for (const key of ["payment", "payout", "hiring"]) {
+    check(at, c[key] === null || isStr(c[key]), `${key} は文字列か null (未確認)`);
+  }
+  check(at, Array.isArray(c.notes) && c.notes.every(isStr), "notes は文字列の配列");
+  check(
+    at,
+    Array.isArray(c.sourceUrls) && c.sourceUrls.length > 0 && c.sourceUrls.every(isUrl),
+    "sourceUrls (出典) は https の URL を1つ以上",
+  );
+  check(at, DATE.test(c.checkedAt ?? ""), "checkedAt は YYYY-MM-DD");
+}
+for (const [i, j] of jobs.entries()) {
+  check(`jobs[${i}] ${j.id ?? ""}`, companyNames.has(j.company), `company "${j.company}" が companies.json にない`);
+}
+
 const companies = new Set(jobs.map((j) => j.company));
 const expIds = new Set();
 for (const [i, e] of experiences.entries()) {
@@ -78,4 +105,4 @@ if (errors.length > 0) {
   process.exit(1);
 }
 const verified = experiences.filter((e) => e.status === "verified").length;
-console.log(`data OK: 求人 ${jobs.length} 件 / 体験談 ${experiences.length} 件 (公開 ${verified} 件)`);
+console.log(`data OK: 会社 ${companyList.length} 社 / 求人 ${jobs.length} 件 / 体験談 ${experiences.length} 件 (公開 ${verified} 件)`);

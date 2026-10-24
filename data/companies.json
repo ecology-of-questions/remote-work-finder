@@ -1,0 +1,69 @@
+[
+  {
+    "slug": "sme-careers",
+    "name": "SME Careers / SuperAnnotate",
+    "about": "AI学習データ企業 SuperAnnotate の子会社。各分野の専門家に、AIの評価・学習データ作成の仕事を業務委託で出している。",
+    "website": "https://sme.careers/",
+    "payment": null,
+    "payout": null,
+    "hiring": "求人ごとに異なる。例として Japanese Team Lead は、AI面接・専門課題・採用担当との面接。",
+    "notes": [
+      "求人ごとに応募できる国が決まっている。日本が対象に入っているかは各求人で確認する。",
+      "「今は案件がない」と明記された登録型の募集がある。"
+    ],
+    "sourceUrls": ["https://sme.careers/jobs"],
+    "checkedAt": "2026-10-24"
+  },
+  {
+    "slug": "dataannotation",
+    "name": "DataAnnotation",
+    "about": "AIの回答の評価・書き直しなどを、在宅の業務委託で出しているプラットフォーム。",
+    "website": "https://www.dataannotation.tech/",
+    "payment": "PayPal",
+    "payout": "毎週（求人ページの記載）。申請から数日で入金（FAQ）。",
+    "hiring": "応募 → 適性テスト（Qualify）→ 仕事・支払い。",
+    "notes": [
+      "最低稼働時間や毎日のログインの義務はない（FAQ）。",
+      "学位は不要と明記されている職種がある。",
+      "日本から応募できるかは公式ページに記載がない。"
+    ],
+    "sourceUrls": [
+      "https://www.dataannotation.tech/faqs",
+      "https://www.dataannotation.tech/job-board/japanese-expert"
+    ],
+    "checkedAt": "2026-10-24"
+  },
+  {
+    "slug": "alignerr",
+    "name": "Alignerr",
+    "about": "専門家がAIの学習・評価の仕事を在宅で請け負うネットワーク。同じ仕事を地域別（東京・大阪・ロンドンなど）に募集していることが多い。",
+    "website": "https://www.alignerr.com/",
+    "payment": null,
+    "payout": "毎週（求人ページの記載）。",
+    "hiring": "簡単なスクリーニングのあと仕事開始。職種によっては無報酬の適性テストがある。",
+    "notes": [
+      "同じ職種でも地域ごとに別の求人になっている。住んでいる地域向けの求人から応募する。"
+    ],
+    "sourceUrls": [
+      "https://www.alignerr.com/jobs",
+      "https://www.alignerr.com/jobs/8e41d064-ae99-4ed8-b80b-cf604dd01d0b"
+    ],
+    "checkedAt": "2026-10-24"
+  },
+  {
+    "slug": "outlier",
+    "name": "Outlier",
+    "about": "Scale AI が運営する、AIの学習・評価の仕事を業務委託で出しているプラットフォーム。",
+    "website": "https://outlier.ai/",
+    "payment": null,
+    "payout": null,
+    "hiring": "短いスクリーニングとオンボーディングのあと仕事開始（求人ページの記載）。",
+    "notes": [
+      "一覧に出る時給と、求人本文の基本単価が違うことがある。本文の金額を確認する。",
+      "基本単価に加えて「Missions」というインセンティブがある（平均 +7.5%）。研修中などは低い単価になる。",
+      "仕事がある時だけ働ける形の求人がある。"
+    ],
+    "sourceUrls": ["https://app.outlier.ai/opportunities"],
+    "checkedAt": "2026-10-24"
+  }
+]

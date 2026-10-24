@@ -1,0 +1,75 @@
+---
+import type { Company } from "../lib/types";
+import { companyPath, jobsOf } from "../lib/data";
+
+interface Props {
+  companies: Company[];
+}
+
+const { companies } = Astro.props;
+---
+
+<!-- 保存はブラウザ側にしかないので、全社分を出しておき、保存した会社だけを表示する -->
+<section class="saved" id="saved-companies" hidden aria-labelledby="saved-companies-title">
+  <h2 id="saved-companies-title">保存した会社</h2>
+  <ul>
+    {
+      companies.map((c) => (
+        <li data-saved-company={`company:${c.name}`} hidden>
+          <a href={companyPath(c)}>{c.name}</a>
+          <span class="count">{jobsOf(c).length}件</span>
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<script>
+  import { SAVED_CHANGE, saved } from "../lib/saved";
+
+  const section = document.getElementById("saved-companies")!;
+
+  function sync() {
+    let any = false;
+    for (const li of section.querySelectorAll<HTMLElement>("[data-saved-company]")) {
+      li.hidden = !saved.has(li.dataset.savedCompany!);
+      any ||= !li.hidden;
+    }
+    section.hidden = !any;
+  }
+
+  document.addEventListener(SAVED_CHANGE, sync);
+  sync();
+</script>
+
+<style>
+  .saved {
+    padding: var(--space-4) var(--space-5);
+    background: var(--color-accent-soft);
+    border-radius: var(--radius-md);
+  }
+
+  h2 {
+    margin: 0 0 var(--space-2);
+    font-size: var(--text-sm);
+  }
+
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-5);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  a {
+    font-weight: 700;
+  }
+
+  .count {
+    margin-left: var(--space-2);
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+  }
+</style>

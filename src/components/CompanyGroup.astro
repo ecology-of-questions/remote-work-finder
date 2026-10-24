@@ -1,9 +1,11 @@
 ---
-import type { Experience, Job } from "../lib/types";
+import type { Company, Experience, Job } from "../lib/types";
+import { companyPath } from "../lib/data";
 import JobCard from "./JobCard.astro";
+import SaveCompanyButton from "./SaveCompanyButton.astro";
 
 interface Props {
-  company: string;
+  company: Company;
   jobs: Job[];
   experiences: Experience[];
 }
@@ -11,13 +13,11 @@ interface Props {
 const { company, jobs, experiences } = Astro.props;
 ---
 
-<section class="group" data-company={company}>
+<section class="group" data-company={company.name}>
   <header class="head">
-    <h2 class="name">{company}</h2>
+    <h2 class="name"><a href={companyPath(company)}>{company.name}</a></h2>
     <span class="count"><span data-company-count>{jobs.length}</span>件</span>
-    <button type="button" class="save" data-save={`company:${company}`} aria-pressed="false">
-      <span class="save-off">＋ 会社を保存</span><span class="save-on">保存済みの会社</span>
-    </button>
+    <SaveCompanyButton company={company} />
   </header>
   <div class="jobs">
     {jobs.map((job) => <JobCard job={job} experiences={experiences} />)}
@@ -46,6 +46,9 @@ const { company, jobs, experiences } = Astro.props;
     flex: 1 1 100%;
     margin: 0;
     font-size: var(--text-lg);
+  }
+
+  .name a {
     color: var(--color-accent);
   }
 
@@ -53,25 +56,6 @@ const { company, jobs, experiences } = Astro.props;
     margin-left: auto;
     color: var(--color-text-muted);
     font-size: var(--text-sm);
-  }
-
-  .save {
-    padding: var(--space-2) var(--space-4);
-    background: transparent;
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-sm);
-    color: var(--color-accent);
-    font-size: var(--text-sm);
-    cursor: pointer;
-  }
-
-  .save-on,
-  .save[aria-pressed="true"] .save-off {
-    display: none;
-  }
-
-  .save[aria-pressed="true"] .save-on {
-    display: inline;
   }
 
   .jobs {

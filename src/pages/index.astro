@@ -2,15 +2,9 @@
 import Layout from "../layouts/Layout.astro";
 import FilterPanel from "../components/FilterPanel.astro";
 import CompanyGroup from "../components/CompanyGroup.astro";
-import jobsData from "../../data/jobs.json";
-import experiencesData from "../../data/experiences.json";
-import type { Experience, Job } from "../lib/types";
+import SavedCompanies from "../components/SavedCompanies.astro";
+import { experiencesOf, jobs, jobsOf, listedCompanies } from "../lib/data";
 
-const jobs = jobsData as Job[];
-// 公開するのは人が原文を確認した体験談だけ
-const experiences = (experiencesData as Experience[]).filter((e) => e.status === "verified");
-
-const companies = [...new Set(jobs.map((j) => j.company))];
 const categories = [...new Set(jobs.map((j) => j.category))].sort((a, b) => a.localeCompare(b, "ja"));
 const lastChecked = jobs.map((j) => j.checkedAt).sort().at(-1);
 ---
@@ -28,6 +22,8 @@ const lastChecked = jobs.map((j) => j.checkedAt).sort().at(-1);
       {lastChecked && <p class="updated">最終確認日：{lastChecked}</p>}
     </header>
 
+    <SavedCompanies companies={listedCompanies} />
+
     <FilterPanel categories={categories} />
 
     <div class="results-head">
@@ -42,12 +38,8 @@ const lastChecked = jobs.map((j) => j.checkedAt).sort().at(-1);
 
     <div id="results" class="results">
       {
-        companies.map((company) => (
-          <CompanyGroup
-            company={company}
-            jobs={jobs.filter((j) => j.company === company)}
-            experiences={experiences.filter((e) => e.company === company)}
-          />
+        listedCompanies.map((company) => (
+          <CompanyGroup company={company} jobs={jobsOf(company)} experiences={experiencesOf(company)} />
         ))
       }
     </div>
@@ -60,10 +52,10 @@ const lastChecked = jobs.map((j) => j.checkedAt).sort().at(-1);
 </Layout>
 
 <script>
+  import "../scripts/interactions";
   import { compareJobs, emptyFilters, matchesJob, type Filters, type SortKey } from "../lib/filter";
+  import { SAVED_CHANGE, saved } from "../lib/saved";
   import type { Job } from "../lib/types";
-
-  const SAVED_KEY = "remote-work-finder:saved";
 
   const jobs: Job[] = JSON.parse(document.getElementById("jobs-data")!.textContent ?? "[]");
   const form = document.getElementById("filters") as HTMLFormElement;
@@ -71,24 +63,6 @@ const lastChecked = jobs.map((j) => j.checkedAt).sort().at(-1);
   const results = document.getElementById("results")!;
   const countEl = document.getElementById("result-count")!;
   const noResults = document.getElementById("no-results")!;
-
-  function loadSaved(): Set<string> {
-    try {
-      return new Set(JSON.parse(localStorage.getItem(SAVED_KEY) ?? "[]"));
-    } catch {
-      return new Set();
-    }
-  }
-
-  const saved = loadSaved();
-
-  function persistSaved() {
-    try {
-      localStorage.setItem(SAVED_KEY, JSON.stringify([...saved]));
-    } catch {
-      // 保存できない環境 (プライベートモードなど) ではこのページを開いている間だけ覚える
-    }
-  }
 
   function readFilters(): Filters {
     const d = new FormData(form);
@@ -115,84 +89,37 @@ const lastChecked = jobs.map((j) => j.checkedAt).sort().at(-1);
     const filters = readFilters();
     const sort = sortSelect.value as SortKey;
     const visible = jobs.filter((j) => matchesJob(j, filters, saved)).sort((a, b) => compareJobs(a, b, sort));
-    const visibleIds = new Set(visible.map((j) => j.id));
+    const rank = new Map(visible.map((j, i) => [j.id, i]));
 
     // 会社は「その会社でいちばん上に来る求人」の順に並べる
     const companyOrder: string[] = [];
     for (const j of visible) if (!companyOrder.includes(j.company)) companyOrder.push(j.company);
 
     for (const group of results.querySelectorAll<HTMLElement>("[data-company]")) {
-      const company = group.dataset.company!;
       const container = group.querySelector(".jobs") ?? group;
       const cards = [...group.querySelectorAll<HTMLElement>("[data-job-id]")];
-      let shown = 0;
-      for (const card of cards) {
-        const on = visibleIds.has(card.dataset.jobId!);
-        card.hidden = !on;
-        if (on) shown++;
-      }
+      for (const card of cards) card.hidden = !rank.has(card.dataset.jobId!);
       cards
-        .sort((a, b) => visible.findIndex((j) => j.id === a.dataset.jobId) - visible.findIndex((j) => j.id === b.dataset.jobId))
+        .sort((a, b) => (rank.get(a.dataset.jobId!) ?? Infinity) - (rank.get(b.dataset.jobId!) ?? Infinity))
         .forEach((c) => container.appendChild(c));
+      const shown = cards.filter((c) => !c.hidden).length;
       group.hidden = shown === 0;
       group.querySelector("[data-company-count]")!.textContent = String(shown);
-      group.style.order = String(companyOrder.indexOf(company));
+      group.style.order = String(companyOrder.indexOf(group.dataset.company!));
     }
 
     countEl.textContent = String(visible.length);
     noResults.hidden = visible.length > 0;
   }
 
-  function syncSaveButtons() {
-    for (const b of document.querySelectorAll<HTMLButtonElement>("[data-save]")) {
-      b.setAttribute("aria-pressed", String(saved.has(b.dataset.save!)));
-    }
-  }
-
   form.addEventListener("input", render);
   // reset はフォームの値が戻る前に発火するので、戻った後に描き直す
   form.addEventListener("reset", () => setTimeout(render));
   sortSelect.addEventListener("change", render);
-
-  document.addEventListener("click", (event) => {
-    const target = event.target as HTMLElement;
-
-    const saveBtn = target.closest<HTMLButtonElement>("[data-save]");
-    if (saveBtn) {
-      const key = saveBtn.dataset.save!;
-      if (saved.has(key)) saved.delete(key);
-      else saved.add(key);
-      persistSaved();
-      syncSaveButtons();
-      if (form.querySelector<HTMLInputElement>("[name=savedOnly]")!.checked) render();
-      return;
-    }
-
-    const openBtn = target.closest<HTMLElement>("[data-open-dialog]");
-    if (openBtn) {
-      document.querySelector<HTMLDialogElement>(`[data-dialog="${openBtn.dataset.openDialog}"]`)?.showModal();
-      return;
-    }
-
-    if (target.closest("[data-close-dialog]")) {
-      target.closest("dialog")?.close();
-      return;
-    }
-
-    // 背景 (dialog 自身) をクリックしたら閉じる
-    if (target instanceof HTMLDialogElement) target.close();
+  document.addEventListener(SAVED_CHANGE, () => {
+    if (readFilters().savedOnly) render();
   });
 
-  document.addEventListener("change", (event) => {
-    const tab = event.target as HTMLInputElement;
-    if (!tab.matches("[data-topic-tab]")) return;
-    const section = tab.closest("[data-experiences]")!;
-    for (const li of section.querySelectorAll<HTMLElement>("[data-topic]")) {
-      li.hidden = tab.value !== "" && li.dataset.topic !== tab.value;
-    }
-  });
-
-  syncSaveButtons();
   render();
 </script>
 

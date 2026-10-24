@@ -48,6 +48,28 @@ export interface Job {
   addedAt: string;
 }
 
+/** 会社の基本情報。null の項目は「未確認」と表示する */
+export interface Company {
+  /** 会社ページの URL (/companies/<slug>)。英小文字とハイフン */
+  slug: string;
+  /** Job.company と同じ表記 */
+  name: string;
+  /** 1〜2文の説明 */
+  about: string;
+  website: string;
+  /** 支払い方法 (例: PayPal) */
+  payment: string | null;
+  /** 支払いの頻度 (例: 毎週) */
+  payout: string | null;
+  /** 応募から仕事を始めるまでの流れ */
+  hiring: string | null;
+  /** そのほか応募前に知っておくとよいこと */
+  notes: string[];
+  /** 上の情報の出典 */
+  sourceUrls: string[];
+  checkedAt: string;
+}
+
 export type ExperienceTopic = "work" | "hiring" | "payment";
 
 export interface Experience {

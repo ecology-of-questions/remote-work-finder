@@ -9,11 +9,13 @@ Claude が調べて JSON を書き、人が確認してから push する。
 
 - Astro（`output: "static"`）/ TypeScript strict / ライブラリなし
 - `data/jobs.json` … 求人。形は `src/lib/types.ts` の `Job`
+- `data/companies.json` … 会社の基本情報。形は `Company`。会社ページ `/companies/<slug>/` になる
 - `data/experiences.json` … 体験談。形は `Experience`
 - `scripts/validate-data.mjs` … build 前に必ず走るデータ検証。通らないと build が失敗する
 - `src/lib/filter.ts` … 絞り込み・並べ替え（ブラウザで動く）
 - `src/styles/tokens.css` … 色・文字・余白の値はここだけ。コンポーネントに直接書かない
-- 保存（＋保存）はブラウザの localStorage のみ。サーバーに個人情報を送らない
+- 保存（求人・会社）はブラウザの localStorage のみ（`src/lib/saved.ts`）。サーバーに個人情報を送らない
+- 保存ボタン・詳細ダイアログ・体験談タブは `src/scripts/interactions.ts` に共通化し、各ページで読み込む
 - 公開は Cloudflare Workers Builds（`wrangler.jsonc`、静的アセットのみ）
 
 ## 求人を追加するとき（「求人を追加して」と頼まれたら）
@@ -29,10 +31,20 @@ Claude が調べて JSON を書き、人が確認してから push する。
    - `company` は同じ会社なら既存の表記に揃える（グループ化と体験談の紐づけに使う）
    - `summary` は日本語1〜2文。誇張しない
    - `id` は `会社-職種` の英小文字ハイフン区切り。既存と重複させない
-4. すでにある求人と同じものは追加せず、条件が変わっていれば更新して `checkedAt` を直す
-5. `npm run validate` を通す
-6. 追加・更新した求人を表で見せ、「出典で確認できなかった項目（null にしたもの）」を明記する
-7. 人の OK が出てから commit・push する（OK の前に push しない）
+4. 新しい会社なら `data/companies.json` にも追加する（下の「会社を追加するとき」）
+5. すでにある求人と同じものは追加せず、条件が変わっていれば更新して `checkedAt` を直す
+6. `npm run validate` を通す
+7. 追加・更新した求人を表で見せ、「出典で確認できなかった項目（null にしたもの）」を明記する
+8. 人の OK が出てから commit・push する（OK の前に push しない）
+
+## 会社を追加するとき
+
+- `name` は `jobs.json` の `company` と完全に同じ表記にする。`slug` は英小文字ハイフン
+- `payment`（支払い方法）・`payout`（支払いの頻度）・`hiring`（応募の流れ）は、公式の
+  FAQ・求人ページに書いてあることだけ。書いていなければ `null`（=未確認）
+- 求人ページだけに書いてあることは「（求人ページの記載）」のように出どころを添える
+- `notes` には応募前に知っておくと役立つ事実（応募できる国の扱い、時給表示の注意など）
+- `sourceUrls` に読んだページをすべて入れ、`checkedAt` を読んだ日にする
 
 古い求人の点検を頼まれたら、`checkedAt` が古い順に出典を開き直し、
 募集が終わっていれば削除、条件が変わっていれば更新する。

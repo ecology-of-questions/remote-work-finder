@@ -1,0 +1,50 @@
+/* 色・文字・余白の値はここだけで決める。コンポーネントはこの変数を参照する。 */
+:root {
+  --color-bg: #f5f4ef;
+  --color-surface: #ffffff;
+  --color-surface-muted: #eef0e8;
+  --color-text: #1f2a24;
+  --color-text-muted: #5f6a63;
+  --color-border: #dcded6;
+  --color-accent: #23574a;
+  --color-accent-contrast: #ffffff;
+  --color-accent-soft: #e4ece6;
+  --color-badge: #ece8dc;
+  --color-overlay: rgb(30 36 32 / 0.45);
+
+  --font-body: "Hiragino Sans", "Noto Sans JP", system-ui, sans-serif;
+  --text-xs: 0.8125rem;
+  --text-sm: 0.9375rem;
+  --text-md: 1rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.75rem;
+  --leading: 1.7;
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --content-width: 46rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #161a17;
+    --color-surface: #1f2420;
+    --color-surface-muted: #242a25;
+    --color-text: #e6ebe6;
+    --color-text-muted: #a2aca5;
+    --color-border: #363e38;
+    --color-accent: #7fbfa8;
+    --color-accent-contrast: #10201a;
+    --color-accent-soft: #24332d;
+    --color-badge: #34352e;
+    --color-overlay: rgb(0 0 0 / 0.6);
+  }
+}

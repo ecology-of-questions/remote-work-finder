@@ -1,0 +1,167 @@
+---
+interface Props {
+  categories: string[];
+}
+
+const { categories } = Astro.props;
+---
+
+<form class="panel" id="filters" role="search" onsubmit="return false">
+  <p class="scope">フルリモートの仕事だけを載せています</p>
+
+  <label class="visually-hidden" for="f-q">キーワード</label>
+  <input id="f-q" name="q" type="search" class="search" placeholder="職種、会社名、スキルで探す" />
+
+  <label class="field">
+    <span>週に働ける時間</span>
+    <select name="weeklyHours">
+      <option value="">指定なし</option>
+      <option value="5">5時間まで</option>
+      <option value="10">10時間まで</option>
+      <option value="20">20時間まで</option>
+      <option value="30">30時間まで</option>
+    </select>
+  </label>
+
+  <div class="row">
+    <label class="field">
+      <span>電話の仕事</span>
+      <select name="phone">
+        <option value="any">指定なし</option>
+        <option value="confirmed">なし（確認済み）</option>
+        <option value="allow-unknown">なし・未確認</option>
+      </select>
+    </label>
+    <label class="field">
+      <span>仕事中の会議</span>
+      <select name="meetings">
+        <option value="any">指定なし</option>
+        <option value="confirmed">なし（確認済み）</option>
+        <option value="allow-unknown">なし・未確認</option>
+      </select>
+    </label>
+  </div>
+
+  <div class="checks">
+    <label><input type="checkbox" name="shortDayOk" /> 1日2時間までで働ける</label>
+    <label><input type="checkbox" name="flexibleSchedule" /> 時間を自分で決めたい</label>
+    <label><input type="checkbox" name="excludeSpeaking" /> 発話がある仕事を除く</label>
+    <label><input type="checkbox" name="savedOnly" /> 保存したものだけ</label>
+  </div>
+
+  <details class="more">
+    <summary>職種・募集の種類など</summary>
+    <div class="row">
+      <label class="field">
+        <span>職種</span>
+        <select name="category">
+          <option value="">指定なし</option>
+          {categories.map((c) => <option value={c}>{c}</option>)}
+        </select>
+      </label>
+      <label class="field">
+        <span>募集の種類</span>
+        <select name="kind">
+          <option value="">指定なし</option>
+          <option value="job">個別求人</option>
+          <option value="pool">登録先</option>
+        </select>
+      </label>
+    </div>
+    <div class="checks">
+      <label><input type="checkbox" name="noEnglish" /> 英語が不要</label>
+      <label><input type="checkbox" name="japanOk" /> 日本から応募できる（確認済み）</label>
+    </div>
+  </details>
+
+  <button type="reset" class="clear">条件をクリア</button>
+</form>
+
+<style>
+  .panel {
+    display: grid;
+    gap: var(--space-4);
+    padding: var(--space-5);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+  }
+
+  .scope {
+    margin: 0;
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--color-accent);
+  }
+
+  .search,
+  select {
+    width: 100%;
+    padding: var(--space-3) var(--space-4);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+  }
+
+  .field {
+    display: grid;
+    gap: var(--space-1);
+    font-size: var(--text-sm);
+    font-weight: 700;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-3);
+  }
+
+  .checks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-5);
+    font-size: var(--text-sm);
+  }
+
+  .checks label {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .checks input {
+    width: 1.125rem;
+    height: 1.125rem;
+    accent-color: var(--color-accent);
+  }
+
+  .more {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .more summary {
+    cursor: pointer;
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+
+  .more[open] summary {
+    margin-bottom: var(--space-3);
+  }
+
+  .more .checks {
+    margin-top: var(--space-3);
+  }
+
+  .clear {
+    justify-self: end;
+    padding: 0;
+    background: none;
+    border: none;
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+    text-decoration: underline;
+    cursor: pointer;
+  }
+</style>

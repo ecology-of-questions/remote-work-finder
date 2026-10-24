@@ -1,0 +1,146 @@
+---
+import type { Experience, Job } from "../lib/types";
+import { formatPay, formatTristate, formatWeeklyHours } from "../lib/format";
+import ExperienceList from "./ExperienceList.astro";
+
+interface Props {
+  job: Job;
+  experiences: Experience[];
+}
+
+const { job, experiences } = Astro.props;
+
+const conditions: { label: string; value: string; note?: string | null }[] = [
+  { label: "雇用形態", value: job.employmentType ?? "未確認" },
+  { label: "日本からの応募", value: formatTristate(job.japanOk, "可", "不可") },
+  {
+    label: "電話対応・業務の会議",
+    value: `電話：${formatTristate(job.phone)} / 会議：${formatTristate(job.meetings)}`,
+  },
+  { label: "発話・録音", value: formatTristate(job.speaking) },
+  { label: "英語での会話・面接", value: formatTristate(job.english, "必要", "不要"), note: job.englishNote },
+  { label: "1日2時間まで", value: formatTristate(job.shortDayOk, "可", "不可") },
+  { label: "時間を自分で決める", value: formatTristate(job.flexibleSchedule, "可", "不可") },
+  { label: "募集", value: job.kind === "pool" ? "登録先" : "個別求人" },
+];
+---
+
+<section class="box">
+  <h3 class="box-title">公式の募集条件</h3>
+  <p class="pay">{formatPay(job.pay)}</p>
+  {job.pay?.note && <p class="muted">{job.pay.note}</p>}
+  <p class="muted">{formatWeeklyHours(job.weeklyHours)}・在宅</p>
+
+  <dl class="grid">
+    {
+      conditions.map((c) => (
+        <div>
+          <dt>{c.label}</dt>
+          <dd>{c.value}</dd>
+          {c.note && <dd class="muted">{c.note}</dd>}
+        </div>
+      ))
+    }
+  </dl>
+
+  {
+    job.requirements.length > 0 && (
+      <details class="reqs">
+        <summary>応募条件・選考テスト</summary>
+        <ul>
+          {job.requirements.map((r) => (
+            <li>{r}</li>
+          ))}
+        </ul>
+      </details>
+    )
+  }
+
+  <a class="apply" href={job.applyUrl} target="_blank" rel="noopener noreferrer">応募先を見る ↗</a>
+  <p class="source">
+    出典：<a href={job.sourceUrl} target="_blank" rel="noopener noreferrer">{new URL(job.sourceUrl).hostname}</a>（{
+      job.checkedAt
+    } 確認）。条件は変わることがあるので、応募前に必ず出典で確かめてください。
+  </p>
+</section>
+
+<ExperienceList jobId={job.id} experiences={experiences} />
+
+<style>
+  .box {
+    display: grid;
+    gap: var(--space-2);
+    padding: var(--space-5);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+  }
+
+  .box-title {
+    margin: 0;
+    padding-bottom: var(--space-3);
+    border-bottom: 1px solid var(--color-border);
+    font-size: var(--text-md);
+  }
+
+  .pay {
+    margin: var(--space-3) 0 0;
+    font-size: var(--text-xl);
+    font-weight: 700;
+  }
+
+  .muted {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4) var(--space-5);
+    margin: var(--space-4) 0 0;
+  }
+
+  .grid div {
+    padding-bottom: var(--space-3);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .grid dt {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+
+  .grid dd {
+    margin: var(--space-1) 0 0;
+  }
+
+  .reqs summary {
+    cursor: pointer;
+    color: var(--color-accent);
+  }
+
+  .reqs ul {
+    margin: var(--space-2) 0 0;
+    padding-left: var(--space-5);
+    font-size: var(--text-sm);
+  }
+
+  .apply {
+    display: block;
+    margin-top: var(--space-4);
+    padding: var(--space-4);
+    background: var(--color-accent);
+    color: var(--color-accent-contrast);
+    border-radius: var(--radius-sm);
+    text-align: center;
+    text-decoration: none;
+  }
+
+  .source {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: var(--text-xs);
+  }
+</style>

@@ -1,0 +1,154 @@
+---
+import type { Experience, ExperienceTopic } from "../lib/types";
+
+interface Props {
+  /** タブの name を求人ごとに分けるため */
+  jobId: string;
+  /** この会社の確認済み体験談 */
+  experiences: Experience[];
+}
+
+const { jobId, experiences } = Astro.props;
+
+const topics: { value: "" | ExperienceTopic; label: string }[] = [
+  { value: "", label: "すべて" },
+  { value: "work", label: "案件・作業" },
+  { value: "hiring", label: "登録・選考" },
+  { value: "payment", label: "報酬・入金" },
+];
+
+// 同じ投稿者の複数投稿は1人として数える
+const authorCount = new Set(experiences.map((e) => `${e.platform}:${e.author}`)).size;
+---
+
+<section class="experiences" data-experiences>
+  <h3 class="heading">利用者の体験 <span class="count">{authorCount}人</span></h3>
+  <p class="muted">同じ会社についての投稿です。この求人と同じ案件の話とは限りません。</p>
+
+  {
+    experiences.length === 0 ? (
+      <p class="empty">この会社の体験談はまだありません。</p>
+    ) : (
+      <>
+        <div class="tabs" role="radiogroup" aria-label="体験談の種類">
+          {topics.map((t, i) => (
+            <label>
+              <input type="radio" name={`topic-${jobId}`} value={t.value} checked={i === 0} data-topic-tab />
+              {t.label}
+            </label>
+          ))}
+        </div>
+        <ul class="list">
+          {experiences.map((e) => (
+            <li data-topic={e.topic}>
+              <p>{e.summary}</p>
+              <p class="meta">
+                <a href={e.sourceUrl} target="_blank" rel="noopener noreferrer">
+                  {e.platform}の元投稿
+                </a>
+                {e.postedAt && `・${e.postedAt} 投稿`}・{e.verifiedAt} 原文確認
+              </p>
+            </li>
+          ))}
+        </ul>
+      </>
+    )
+  }
+
+  <p class="note">
+    原文確認は投稿が実在し、要約が投稿内容と合っていることの確認です。報酬の入金などを独立に証明するものではありません。同じ投稿者の複数投稿は別人の体験として数えません。
+  </p>
+</section>
+
+<style>
+  .experiences {
+    display: grid;
+    gap: var(--space-3);
+    margin-top: var(--space-6);
+  }
+
+  .heading {
+    margin: 0;
+    font-size: var(--text-lg);
+  }
+
+  .count {
+    margin-left: var(--space-2);
+    font-size: var(--text-sm);
+    font-weight: 400;
+    color: var(--color-text-muted);
+  }
+
+  .muted,
+  .empty {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+  }
+
+  .empty {
+    padding: var(--space-4) 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .tabs {
+    display: flex;
+    gap: var(--space-4);
+    overflow-x: auto;
+    white-space: nowrap;
+    border-bottom: 1px solid var(--color-border);
+    font-size: var(--text-sm);
+  }
+
+  .tabs label {
+    position: relative;
+    padding: var(--space-2) 0;
+    cursor: pointer;
+    color: var(--color-text-muted);
+  }
+
+  .tabs input {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    opacity: 0;
+  }
+
+  .tabs label:has(input:checked) {
+    color: var(--color-accent);
+    font-weight: 700;
+    box-shadow: inset 0 -2px 0 var(--color-accent);
+  }
+
+  .tabs label:has(input:focus-visible) {
+    outline: 2px solid var(--color-accent);
+  }
+
+  .list {
+    display: grid;
+    gap: var(--space-3);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .list li {
+    padding-bottom: var(--space-3);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .list p {
+    margin: 0;
+  }
+
+  .meta {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+  }
+
+  .note {
+    margin: 0;
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+  }
+</style>

@@ -1,0 +1,255 @@
+---
+import Layout from "../layouts/Layout.astro";
+import FilterPanel from "../components/FilterPanel.astro";
+import CompanyGroup from "../components/CompanyGroup.astro";
+import jobsData from "../../data/jobs.json";
+import experiencesData from "../../data/experiences.json";
+import type { Experience, Job } from "../lib/types";
+
+const jobs = jobsData as Job[];
+// 公開するのは人が原文を確認した体験談だけ
+const experiences = (experiencesData as Experience[]).filter((e) => e.status === "verified");
+
+const companies = [...new Set(jobs.map((j) => j.company))];
+const categories = [...new Set(jobs.map((j) => j.category))].sort((a, b) => a.localeCompare(b, "ja"));
+const lastChecked = jobs.map((j) => j.checkedAt).sort().at(-1);
+---
+
+<Layout
+  title="フルリモートの仕事を探す"
+  description="在宅・フルリモートで働ける仕事だけを集めた一覧。電話や会議の有無、1日の稼働時間で絞り込めます。"
+>
+  <main class="page">
+    <header class="intro">
+      <h1>フルリモートの仕事を探す</h1>
+      <p>
+        在宅で完結する仕事だけを集めています。分からない条件は「未確認」と表示しています。応募前に必ず各求人の出典で最新の条件を確かめてください。
+      </p>
+      {lastChecked && <p class="updated">最終確認日：{lastChecked}</p>}
+    </header>
+
+    <FilterPanel categories={categories} />
+
+    <div class="results-head">
+      <p class="total" aria-live="polite"><span id="result-count">{jobs.length}</span>件</p>
+      <label class="visually-hidden" for="sort">並び順</label>
+      <select id="sort" class="sort">
+        <option value="added">掲載順</option>
+        <option value="pay">時給が高い順（USD）</option>
+        <option value="checked">確認日が新しい順</option>
+      </select>
+    </div>
+
+    <div id="results" class="results">
+      {
+        companies.map((company) => (
+          <CompanyGroup
+            company={company}
+            jobs={jobs.filter((j) => j.company === company)}
+            experiences={experiences.filter((e) => e.company === company)}
+          />
+        ))
+      }
+    </div>
+    <p id="no-results" class="empty" hidden={jobs.length > 0}>
+      {jobs.length === 0 ? "まだ求人を載せていません。" : "条件に合う仕事がありません。条件を減らしてみてください。"}
+    </p>
+  </main>
+
+  <script type="application/json" id="jobs-data" set:html={JSON.stringify(jobs).replaceAll("<", "\\u003c")} />
+</Layout>
+
+<script>
+  import { compareJobs, emptyFilters, matchesJob, type Filters, type SortKey } from "../lib/filter";
+  import type { Job } from "../lib/types";
+
+  const SAVED_KEY = "remote-work-finder:saved";
+
+  const jobs: Job[] = JSON.parse(document.getElementById("jobs-data")!.textContent ?? "[]");
+  const form = document.getElementById("filters") as HTMLFormElement;
+  const sortSelect = document.getElementById("sort") as HTMLSelectElement;
+  const results = document.getElementById("results")!;
+  const countEl = document.getElementById("result-count")!;
+  const noResults = document.getElementById("no-results")!;
+
+  function loadSaved(): Set<string> {
+    try {
+      return new Set(JSON.parse(localStorage.getItem(SAVED_KEY) ?? "[]"));
+    } catch {
+      return new Set();
+    }
+  }
+
+  const saved = loadSaved();
+
+  function persistSaved() {
+    try {
+      localStorage.setItem(SAVED_KEY, JSON.stringify([...saved]));
+    } catch {
+      // 保存できない環境 (プライベートモードなど) ではこのページを開いている間だけ覚える
+    }
+  }
+
+  function readFilters(): Filters {
+    const d = new FormData(form);
+    const str = (k: string) => String(d.get(k) ?? "");
+    const hours = str("weeklyHours");
+    return {
+      ...emptyFilters,
+      q: str("q").trim(),
+      weeklyHours: hours ? Number(hours) : null,
+      phone: (str("phone") || "any") as Filters["phone"],
+      meetings: (str("meetings") || "any") as Filters["meetings"],
+      shortDayOk: d.has("shortDayOk"),
+      flexibleSchedule: d.has("flexibleSchedule"),
+      excludeSpeaking: d.has("excludeSpeaking"),
+      noEnglish: d.has("noEnglish"),
+      japanOk: d.has("japanOk"),
+      category: str("category"),
+      kind: str("kind") as Filters["kind"],
+      savedOnly: d.has("savedOnly"),
+    };
+  }
+
+  function render() {
+    const filters = readFilters();
+    const sort = sortSelect.value as SortKey;
+    const visible = jobs.filter((j) => matchesJob(j, filters, saved)).sort((a, b) => compareJobs(a, b, sort));
+    const visibleIds = new Set(visible.map((j) => j.id));
+
+    // 会社は「その会社でいちばん上に来る求人」の順に並べる
+    const companyOrder: string[] = [];
+    for (const j of visible) if (!companyOrder.includes(j.company)) companyOrder.push(j.company);
+
+    for (const group of results.querySelectorAll<HTMLElement>("[data-company]")) {
+      const company = group.dataset.company!;
+      const container = group.querySelector(".jobs") ?? group;
+      const cards = [...group.querySelectorAll<HTMLElement>("[data-job-id]")];
+      let shown = 0;
+      for (const card of cards) {
+        const on = visibleIds.has(card.dataset.jobId!);
+        card.hidden = !on;
+        if (on) shown++;
+      }
+      cards
+        .sort((a, b) => visible.findIndex((j) => j.id === a.dataset.jobId) - visible.findIndex((j) => j.id === b.dataset.jobId))
+        .forEach((c) => container.appendChild(c));
+      group.hidden = shown === 0;
+      group.querySelector("[data-company-count]")!.textContent = String(shown);
+      group.style.order = String(companyOrder.indexOf(company));
+    }
+
+    countEl.textContent = String(visible.length);
+    noResults.hidden = visible.length > 0;
+  }
+
+  function syncSaveButtons() {
+    for (const b of document.querySelectorAll<HTMLButtonElement>("[data-save]")) {
+      b.setAttribute("aria-pressed", String(saved.has(b.dataset.save!)));
+    }
+  }
+
+  form.addEventListener("input", render);
+  // reset はフォームの値が戻る前に発火するので、戻った後に描き直す
+  form.addEventListener("reset", () => setTimeout(render));
+  sortSelect.addEventListener("change", render);
+
+  document.addEventListener("click", (event) => {
+    const target = event.target as HTMLElement;
+
+    const saveBtn = target.closest<HTMLButtonElement>("[data-save]");
+    if (saveBtn) {
+      const key = saveBtn.dataset.save!;
+      if (saved.has(key)) saved.delete(key);
+      else saved.add(key);
+      persistSaved();
+      syncSaveButtons();
+      if (form.querySelector<HTMLInputElement>("[name=savedOnly]")!.checked) render();
+      return;
+    }
+
+    const openBtn = target.closest<HTMLElement>("[data-open-dialog]");
+    if (openBtn) {
+      document.querySelector<HTMLDialogElement>(`[data-dialog="${openBtn.dataset.openDialog}"]`)?.showModal();
+      return;
+    }
+
+    if (target.closest("[data-close-dialog]")) {
+      target.closest("dialog")?.close();
+      return;
+    }
+
+    // 背景 (dialog 自身) をクリックしたら閉じる
+    if (target instanceof HTMLDialogElement) target.close();
+  });
+
+  document.addEventListener("change", (event) => {
+    const tab = event.target as HTMLInputElement;
+    if (!tab.matches("[data-topic-tab]")) return;
+    const section = tab.closest("[data-experiences]")!;
+    for (const li of section.querySelectorAll<HTMLElement>("[data-topic]")) {
+      li.hidden = tab.value !== "" && li.dataset.topic !== tab.value;
+    }
+  });
+
+  syncSaveButtons();
+  render();
+</script>
+
+<style>
+  .page {
+    display: grid;
+    gap: var(--space-5);
+    width: min(100% - 2 * var(--space-4), var(--content-width));
+    margin: 0 auto;
+    padding: var(--space-6) 0 var(--space-7);
+  }
+
+  .intro h1 {
+    margin: 0 0 var(--space-2);
+    font-size: var(--text-xl);
+  }
+
+  .intro p {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+  }
+
+  .intro .updated {
+    margin-top: var(--space-2);
+  }
+
+  .results-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+  }
+
+  .total {
+    margin: 0;
+    font-size: var(--text-lg);
+  }
+
+  .sort {
+    padding: var(--space-2) var(--space-3);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    font-size: var(--text-sm);
+  }
+
+  .results {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+  }
+
+  .empty {
+    margin: 0;
+    padding: var(--space-6) 0;
+    text-align: center;
+    color: var(--color-text-muted);
+  }
+</style>

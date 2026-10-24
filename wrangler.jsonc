@@ -1,0 +1,10 @@
+// Cloudflare Workers Builds 用。Worker のコードは持たず、Astro の
+// 静的ビルド (dist/) を Workers Static Assets として配信するだけ。
+{
+  "name": "remote-work-finder",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page"
+  }
+}

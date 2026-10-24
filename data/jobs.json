@@ -1,1 +1,147 @@
-[]
+[
+  {
+    "company": "SME Careers / SuperAnnotate",
+    "kind": "job",
+    "weeklyHours": null,
+    "employmentType": "業務委託",
+    "phone": null,
+    "meetings": null,
+    "speaking": null,
+    "english": true,
+    "englishNote": "英語C1〜C2が必要。面接は英語。",
+    "japanOk": true,
+    "shortDayOk": null,
+    "flexibleSchedule": null,
+    "sourceUrl": "https://sme.careers/jobs",
+    "checkedAt": "2026-10-24",
+    "addedAt": "2026-10-24",
+    "id": "sme-careers-senior-video-editor",
+    "title": "Senior Video Editor",
+    "category": "動画編集",
+    "summary": "AI生成動画と人が編集した動画の品質を、プロの編集者の目で評価・フィードバックする。作品集の提出が必須。",
+    "pay": {
+      "min": null,
+      "max": 50,
+      "currency": "USD",
+      "unit": "hour",
+      "note": "上限額。時給制の業務委託。"
+    },
+    "requirements": [
+      "映像編集の実務5年以上",
+      "英語C1〜C2",
+      "Premiere Pro・DaVinci Resolve など編集ソフト2種以上",
+      "作品集（デモリール）のリンク提出が必須",
+      "リード編集者・品質管理などの経験"
+    ],
+    "applyUrl": "https://sme.careers/apply?jobId=VideoEditor-26-900"
+  },
+  {
+    "company": "SME Careers / SuperAnnotate",
+    "kind": "job",
+    "weeklyHours": null,
+    "employmentType": "業務委託",
+    "phone": null,
+    "meetings": null,
+    "speaking": null,
+    "english": true,
+    "englishNote": "英語B2以上（作業手順を英語で文書化する）。",
+    "japanOk": true,
+    "shortDayOk": null,
+    "flexibleSchedule": true,
+    "sourceUrl": "https://sme.careers/jobs",
+    "checkedAt": "2026-10-24",
+    "addedAt": "2026-10-24",
+    "id": "sme-careers-blender-specialist",
+    "title": "Blender Specialist",
+    "category": "3DCG",
+    "summary": "Blenderの実務的な課題を自分で作り、配布される録画ツールで作業を記録して、正解の判定基準を書く。",
+    "pay": {
+      "min": null,
+      "max": 30,
+      "currency": "USD",
+      "unit": "hour",
+      "note": "上限額。時給制の業務委託。"
+    },
+    "requirements": [
+      "Blender中心の3DCG実務2〜5年、または同等の実力",
+      "モデリング・UV・マテリアル・ライティング・レンダリング",
+      "録画ツールを入れられるPC（Windows 11 / Ubuntu / macOS）",
+      "英語B2以上"
+    ],
+    "applyUrl": "https://sme.careers/apply?jobId=BLENDER-26-123"
+  },
+  {
+    "company": "SME Careers / SuperAnnotate",
+    "kind": "pool",
+    "weeklyHours": null,
+    "employmentType": "業務委託",
+    "phone": null,
+    "meetings": null,
+    "speaking": null,
+    "english": true,
+    "englishNote": "英語C1以上（読み書き）。面接は英語。",
+    "japanOk": true,
+    "shortDayOk": null,
+    "flexibleSchedule": null,
+    "sourceUrl": "https://sme.careers/jobs",
+    "checkedAt": "2026-10-24",
+    "addedAt": "2026-10-24",
+    "id": "sme-careers-japanese-language-expert",
+    "title": "Japanese Language Expert",
+    "category": "AI評価（日本語）",
+    "summary": "日本語のAI回答を評価・比較し、模範解答や解説を書く。今は案件がなく、将来の案件のための登録。",
+    "pay": {
+      "min": null,
+      "max": 40,
+      "currency": "USD",
+      "unit": "hour",
+      "note": "上限額。現時点で案件はなく、条件は案件の発生時に確認。"
+    },
+    "requirements": [
+      "翻訳・言語学・ローカライズなどの学士以上",
+      "日本語ネイティブ相当",
+      "英語C1以上",
+      "翻訳・ローカライズ実務5年以上",
+      "MQM/LQA による品質判定の経験",
+      "CATツールの経験"
+    ],
+    "applyUrl": "https://sme.careers/apply?jobId=Japanese-25-303"
+  },
+  {
+    "company": "SME Careers / SuperAnnotate",
+    "kind": "pool",
+    "weeklyHours": null,
+    "employmentType": "業務委託",
+    "phone": null,
+    "meetings": true,
+    "speaking": null,
+    "english": true,
+    "englishNote": "英語でのやりとりが必要。選考はAI面接・課題・採用担当との面接。",
+    "japanOk": true,
+    "shortDayOk": null,
+    "flexibleSchedule": null,
+    "sourceUrl": "https://sme.careers/jobs",
+    "checkedAt": "2026-10-24",
+    "addedAt": "2026-10-24",
+    "id": "sme-careers-japanese-team-lead",
+    "title": "Japanese Team Lead",
+    "category": "AI評価（日本語）",
+    "summary": "日本語AI学習データの品質リーダー。トレーナーの作業をチェックし、Discordで連絡・指導する。今は案件がなく、将来の案件のための登録。",
+    "pay": {
+      "min": null,
+      "max": 55,
+      "currency": "USD",
+      "unit": "hour",
+      "note": "上限額。現時点で案件はなく、条件は案件の発生時に確認。"
+    },
+    "requirements": [
+      "日本語・言語学・翻訳などの学士以上",
+      "日本語ネイティブ相当",
+      "日本語の執筆・編集・翻訳・QAなどの実務3年以上",
+      "リモートチームのまとめ役の経験（強く推奨）",
+      "Discord・Google スプレッドシート等に慣れていること",
+      "選考：AI面接・専門課題・採用担当との面接"
+    ],
+    "applyUrl": "https://sme.careers/apply?jobId=JapaneseQAL-25-303"
+  }
+]
